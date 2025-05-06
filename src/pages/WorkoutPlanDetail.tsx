@@ -42,6 +42,14 @@ const WorkoutPlanDetail = () => {
     ]
   };
 
+  // Fonction pour démarrer le premier entraînement
+  const startFirstWorkout = () => {
+    if (workoutPlan.weeks.length > 0 && workoutPlan.weeks[0].workouts.length > 0) {
+      const firstWorkout = workoutPlan.weeks[0].workouts[0];
+      navigate(`/workout-plans/${id}/workout/${firstWorkout.id}`);
+    }
+  };
+
   return (
     <Layout>
       <div className="container px-4 py-8">
@@ -105,7 +113,7 @@ const WorkoutPlanDetail = () => {
                 <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">Prêt à commencer ce programme d'entraînement? Cliquez sur le bouton ci-dessous pour démarrer votre premier entraînement.</p>
                   
-                  <Button className="w-full">
+                  <Button className="w-full" onClick={startFirstWorkout}>
                     <Dumbbell className="mr-2 h-4 w-4" />
                     Commencer l'entraînement
                   </Button>
