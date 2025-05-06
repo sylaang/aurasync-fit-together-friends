@@ -15,7 +15,7 @@ interface WorkoutPlanCardProps {
   image: string;
   progress?: number;
   recommended?: boolean;
-  id?: string; // Ajout d'un identifiant optionnel pour la navigation
+  id?: string;
 }
 
 const WorkoutPlanCard = ({
@@ -27,12 +27,28 @@ const WorkoutPlanCard = ({
   image,
   progress,
   recommended = false,
-  id = crypto.randomUUID().slice(0, 8), // Génère un ID par défaut si non fourni
+  id,
 }: WorkoutPlanCardProps) => {
   const navigate = useNavigate();
   
+  // Générer un ID cohérent basé sur le titre si aucun ID n'est fourni
+  const getPlanId = () => {
+    if (id) return id;
+    
+    // Sinon, créer un ID basé sur le titre
+    if (title.includes("perte de poids")) return "programme-perte-de-poids";
+    if (title.includes("masse musculaire")) return "prise-de-masse-musculaire";
+    if (title.includes("Débutant")) return "debutant-fitness";
+    if (title.includes("Marathon")) return "marathon-preparation";
+    if (title.includes("Yoga")) return "yoga-flexibilite";
+    if (title.includes("HIIT")) return "hiit-challenge";
+    
+    // Si aucune correspondance, utiliser un ID par défaut basé sur le titre
+    return title.toLowerCase().replace(/\s+/g, '-');
+  };
+  
   const handleViewPlan = () => {
-    navigate(`/workout-plans/${id}`);
+    navigate(`/workout-plans/${getPlanId()}`);
   };
   
   return (

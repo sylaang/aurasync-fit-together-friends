@@ -33,6 +33,7 @@ const WorkoutPlans = () => {
             <TabsContent value="all" className="mt-0">
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <WorkoutPlanCard
+                  id="programme-perte-de-poids"
                   title="Programme perte de poids"
                   description="Un programme d'entraînement de 8 semaines conçu pour maximiser la perte de graisse"
                   duration="8 semaines"
@@ -42,6 +43,7 @@ const WorkoutPlans = () => {
                 />
                 
                 <WorkoutPlanCard
+                  id="prise-de-masse-musculaire"
                   title="Prise de masse musculaire"
                   description="Un programme progressif pour développer votre force et votre masse musculaire"
                   duration="12 semaines"
@@ -51,6 +53,7 @@ const WorkoutPlans = () => {
                 />
                 
                 <WorkoutPlanCard
+                  id="debutant-fitness"
                   title="Débutant Fitness"
                   description="Commencez votre parcours fitness avec ce programme pour débutants"
                   duration="4 semaines"
@@ -60,6 +63,7 @@ const WorkoutPlans = () => {
                 />
                 
                 <WorkoutPlanCard
+                  id="marathon-preparation"
                   title="Marathon - Préparation"
                   description="Préparez-vous pour votre premier marathon avec ce plan d'entraînement progressif"
                   duration="16 semaines"
@@ -69,6 +73,7 @@ const WorkoutPlans = () => {
                 />
                 
                 <WorkoutPlanCard
+                  id="yoga-flexibilite"
                   title="Yoga & Flexibilité"
                   description="Améliorez votre flexibilité et réduisez le stress avec ce programme de yoga"
                   duration="6 semaines"
@@ -78,6 +83,7 @@ const WorkoutPlans = () => {
                 />
                 
                 <WorkoutPlanCard
+                  id="hiit-challenge"
                   title="HIIT Challenge"
                   description="Brûlez un maximum de calories avec ces entraînements courts mais intensifs"
                   duration="4 semaines"
@@ -91,6 +97,7 @@ const WorkoutPlans = () => {
             <TabsContent value="my-plans" className="mt-0">
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <WorkoutPlanCard
+                  id="mon-plan-personnalise"
                   title="Mon plan personnalisé"
                   description="Plan adapté à mes objectifs de remise en forme"
                   duration="En cours"
@@ -118,6 +125,7 @@ const WorkoutPlans = () => {
             <TabsContent value="recommended" className="mt-0">
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 <WorkoutPlanCard
+                  id="force-endurance"
                   title="Force & Endurance"
                   description="Recommandé pour vous basé sur vos objectifs actuels"
                   duration="6 semaines"
@@ -128,6 +136,7 @@ const WorkoutPlans = () => {
                 />
                 
                 <WorkoutPlanCard
+                  id="entrainement-groupe"
                   title="Entraînement de groupe 30/30"
                   description="Recommandé car vos amis ont rejoint ce plan"
                   duration="4 semaines"
