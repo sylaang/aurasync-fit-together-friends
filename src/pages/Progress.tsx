@@ -3,7 +3,7 @@ import React from "react";
 import Layout from "@/components/layout/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, ChartBar, Dumbbell, Calendar as CalendarIcon } from "lucide-react";
+import { Calendar, ChartBar, Dumbbell, Calendar as CalendarIcon, User } from "lucide-react";
 import WorkoutHistoryTable from "@/components/progress/WorkoutHistoryTable";
 import MetricsOverviewCards from "@/components/progress/MetricsOverviewCards";
 import WorkoutMetricsChart from "@/components/charts/WorkoutMetricsChart";
@@ -28,7 +28,7 @@ const Progress = () => {
               <span>Aperçu</span>
             </TabsTrigger>
             <TabsTrigger value="body-metrics" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
+              <User className="h-4 w-4" />
               <span>Métriques corporelles</span>
             </TabsTrigger>
             <TabsTrigger value="strength" className="flex items-center gap-2">

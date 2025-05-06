@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowUp, Dumbbell, ChartBar, Users, Stopwatch } from "lucide-react";
+import { ArrowUp, Dumbbell, ChartBar, Users, Timer } from "lucide-react";
 
 const MetricsOverviewCards = () => {
   return (
@@ -28,7 +28,7 @@ const MetricsOverviewCards = () => {
       <Card>
         <CardContent className="flex flex-col items-start justify-between p-6">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-fitness-light">
-            <Stopwatch className="h-5 w-5 text-fitness-primary" />
+            <Timer className="h-5 w-5 text-fitness-primary" />
           </div>
           <div className="mt-4">
             <p className="text-sm text-muted-foreground">Temps total d'exercice</p>
