@@ -48,7 +48,9 @@ const WorkoutPlanCard = ({
   };
   
   const handleViewPlan = () => {
-    navigate(`/workout-plans/${getPlanId()}`);
+    const planId = getPlanId();
+    console.log(`Navigating to plan: ${planId}`);
+    navigate(`/workout-plans/${planId}`);
   };
   
   return (
