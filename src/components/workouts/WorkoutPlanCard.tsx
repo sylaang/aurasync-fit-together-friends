@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -14,6 +15,7 @@ interface WorkoutPlanCardProps {
   image: string;
   progress?: number;
   recommended?: boolean;
+  id?: string; // Ajout d'un identifiant optionnel pour la navigation
 }
 
 const WorkoutPlanCard = ({
@@ -25,7 +27,14 @@ const WorkoutPlanCard = ({
   image,
   progress,
   recommended = false,
+  id = crypto.randomUUID().slice(0, 8), // Génère un ID par défaut si non fourni
 }: WorkoutPlanCardProps) => {
+  const navigate = useNavigate();
+  
+  const handleViewPlan = () => {
+    navigate(`/workout-plans/${id}`);
+  };
+  
   return (
     <Card className="overflow-hidden transition-all duration-200 hover:shadow-md">
       <div className="aspect-video w-full overflow-hidden relative">
@@ -70,7 +79,7 @@ const WorkoutPlanCard = ({
         )}
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full">
+        <Button className="w-full" onClick={handleViewPlan}>
           {progress !== undefined ? "Continuer" : "Voir le plan"}
         </Button>
       </CardFooter>
