@@ -1,9 +1,10 @@
+
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Calendar, ChevronRight, Dumbbell, Play, Timer, Check, FlowerLotus } from "lucide-react";
+import { ArrowLeft, Calendar, ChevronRight, Dumbbell, Play, Timer, Check, Flower } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
 const WorkoutExercise = () => {
@@ -269,7 +270,7 @@ const WorkoutExercise = () => {
   const getWorkoutIcon = () => {
     const name = workout.name.toLowerCase();
     if (name.includes('yoga') || name.includes('flexibilité')) {
-      return <FlowerLotus className="h-6 w-6 mb-2 text-fitness-primary" />;
+      return <Flower className="h-6 w-6 mb-2 text-fitness-primary" />;
     }
     return <Dumbbell className="h-6 w-6 mb-2 text-fitness-primary" />;
   };
