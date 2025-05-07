@@ -4,6 +4,7 @@ import { Bell, Menu, User, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,6 +47,7 @@ const Header = () => {
         </nav>
 
         <div className="flex items-center space-x-4">
+          <ThemeToggle />
           <Button variant="ghost" size="icon" className="relative">
             <Bell size={20} />
             <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-fitness-accent"></span>
