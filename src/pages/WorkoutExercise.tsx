@@ -1,14 +1,19 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Calendar, ChevronRight, Dumbbell, Play, Timer, Check, Flower } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 
 const WorkoutExercise = () => {
   const { id, workoutId } = useParams();
   const navigate = useNavigate();
+  const [isWorkoutStarted, setIsWorkoutStarted] = useState(false);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [exerciseProgress, setExerciseProgress] = useState<Record<string, number>>({});
 
   // Dans une application réelle, récupérer les données depuis une API
   const findWorkout = () => {
@@ -308,13 +313,69 @@ const WorkoutExercise = () => {
     );
   }
 
-  // Determine which icon to show based on the workout name
-  const getWorkoutIcon = () => {
-    const name = workout.name.toLowerCase();
-    if (name.includes('yoga') || name.includes('flexibilité') || name.includes('stretching')) {
-      return <Flower className="h-6 w-6 mb-2 text-fitness-primary" />;
+  // Start the workout session
+  const startWorkout = () => {
+    setIsWorkoutStarted(true);
+    toast.success("Entraînement démarré !", {
+      description: "C'est parti ! Suivez votre progression en temps réel."
+    });
+    
+    // Initialize exercise progress
+    const initialProgress: Record<string, number> = {};
+    workout.exercises.forEach(exercise => {
+      initialProgress[exercise.id] = 0;
+    });
+    setExerciseProgress(initialProgress);
+  };
+
+  // Mark current exercise set as completed
+  const completeSet = (exerciseId: string) => {
+    const exercise = workout.exercises.find(ex => ex.id === exerciseId);
+    if (!exercise) return;
+    
+    // Calculate new progress percentage
+    const totalSets = exercise.sets;
+    const currentProgress = exerciseProgress[exerciseId] || 0;
+    const newProgress = Math.min(100, ((currentProgress / 100 * totalSets) + 1) / totalSets * 100);
+    
+    setExerciseProgress(prev => ({
+      ...prev,
+      [exerciseId]: newProgress
+    }));
+    
+    // If exercise is completed, show a message
+    if (newProgress >= 100) {
+      toast.success(`${exercise.name} terminé !`, {
+        description: "Excellent travail ! Passez à l'exercice suivant."
+      });
+    } else {
+      toast("Série complétée !", {
+        description: `${Math.round(newProgress)}% de l'exercice terminé`
+      });
     }
-    return <Dumbbell className="h-6 w-6 mb-2 text-fitness-primary" />;
+  };
+
+  // Navigate to next exercise
+  const goToNextExercise = () => {
+    if (currentExerciseIndex < workout.exercises.length - 1) {
+      setCurrentExerciseIndex(currentExerciseIndex + 1);
+      toast("Exercice suivant", {
+        description: workout.exercises[currentExerciseIndex + 1].name
+      });
+    } else {
+      // Workout completed
+      toast.success("Entraînement terminé !", {
+        description: "Félicitations pour avoir terminé cette séance !"
+      });
+    }
+  };
+
+  // Function to calculate overall workout progress
+  const calculateOverallProgress = () => {
+    if (!workout || !workout.exercises.length) return 0;
+    
+    const totalProgress = Object.values(exerciseProgress).reduce((sum, value) => sum + value, 0);
+    return Math.round(totalProgress / workout.exercises.length);
   };
 
   return (
@@ -332,40 +393,27 @@ const WorkoutExercise = () => {
           <h1 className="text-3xl font-bold">{workout.name}</h1>
         </div>
 
-        <div className="mb-8 grid gap-6 md:grid-cols-3">
-          <div className="md:col-span-2 space-y-6">
-            <Card>
+        {isWorkoutStarted ? (
+          <div className="mb-8">
+            <Card className="mb-6">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xl">Aperçu de la séance</CardTitle>
+                <CardTitle className="text-xl">Progression de l'entraînement</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-muted rounded-lg p-4 flex flex-col items-center">
-                      {getWorkoutIcon()}
-                      <p className="text-muted-foreground text-sm">Exercices</p>
-                      <p className="font-semibold">{workout.exercises.length}</p>
-                    </div>
-                    <div className="bg-muted rounded-lg p-4 flex flex-col items-center">
-                      <Timer className="h-6 w-6 mb-2 text-fitness-primary" />
-                      <p className="text-muted-foreground text-sm">Durée estimée</p>
-                      <p className="font-semibold">30-45 min</p>
-                    </div>
-                    <div className="bg-muted rounded-lg p-4 flex flex-col items-center">
-                      <Calendar className="h-6 w-6 mb-2 text-fitness-primary" />
-                      <p className="text-muted-foreground text-sm">Fréquence</p>
-                      <p className="font-semibold">1x / semaine</p>
-                    </div>
-                  </div>
+                <Progress value={calculateOverallProgress()} className="h-2.5 mb-2" />
+                <div className="flex justify-between">
+                  <span className="text-sm text-muted-foreground">Progression globale</span>
+                  <span className="text-sm font-medium">{calculateOverallProgress()}%</span>
                 </div>
               </CardContent>
             </Card>
-
+            
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold">Exercices</h2>
-              
               {workout.exercises.map((exercise, index) => (
-                <Card key={exercise.id} className="overflow-hidden">
+                <Card 
+                  key={exercise.id} 
+                  className={`overflow-hidden border-2 transition-all ${index === currentExerciseIndex ? 'border-fitness-primary' : 'border-transparent'}`}
+                >
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="aspect-video md:aspect-square overflow-hidden">
                       <img 
@@ -403,10 +451,33 @@ const WorkoutExercise = () => {
                         </div>
                       </div>
                       
-                      <Progress value={0} className="h-1.5 mb-2" />
-                      <div className="flex justify-between text-xs">
+                      <Progress value={exerciseProgress[exercise.id] || 0} className="h-1.5 mb-2" />
+                      <div className="flex justify-between text-xs mb-4">
                         <span>Progression</span>
-                        <span>0%</span>
+                        <span>{Math.round(exerciseProgress[exercise.id] || 0)}%</span>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={() => completeSet(exercise.id)} 
+                          className="flex-1"
+                          disabled={exerciseProgress[exercise.id] >= 100}
+                        >
+                          <Check className="mr-2 h-4 w-4" />
+                          Série complétée
+                        </Button>
+                        
+                        {index === currentExerciseIndex && index < workout.exercises.length - 1 && (
+                          <Button 
+                            onClick={goToNextExercise} 
+                            variant="outline" 
+                            className="flex-1"
+                            disabled={exerciseProgress[exercise.id] < 100}
+                          >
+                            Exercice suivant
+                            <ChevronRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -414,45 +485,129 @@ const WorkoutExercise = () => {
               ))}
             </div>
           </div>
-          
-          <div>
-            <Card className="sticky top-4">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Commencer l'entraînement</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    Suivez votre séance en temps réel et enregistrez votre progression.
-                  </p>
-                  
-                  <Button className="w-full">
-                    <Play className="mr-2 h-4 w-4" />
-                    Démarrer la séance
-                  </Button>
-                  
-                  <div className="rounded-lg bg-muted p-4">
-                    <h3 className="mb-2 font-medium">Conseils</h3>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex gap-2">
-                        <Check className="h-4 w-4 text-fitness-primary shrink-0" />
-                        <span>Hydratez-vous régulièrement</span>
-                      </li>
-                      <li className="flex gap-2">
-                        <Check className="h-4 w-4 text-fitness-primary shrink-0" />
-                        <span>Échauffez-vous pendant 5-10 minutes</span>
-                      </li>
-                      <li className="flex gap-2">
-                        <Check className="h-4 w-4 text-fitness-primary shrink-0" />
-                        <span>Respectez les temps de repos</span>
-                      </li>
-                    </ul>
+        ) : (
+          <div className="mb-8 grid gap-6 md:grid-cols-3">
+            <div className="md:col-span-2 space-y-6">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xl">Aperçu de la séance</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="bg-muted rounded-lg p-4 flex flex-col items-center">
+                        {getWorkoutIcon()}
+                        <p className="text-muted-foreground text-sm">Exercices</p>
+                        <p className="font-semibold">{workout.exercises.length}</p>
+                      </div>
+                      <div className="bg-muted rounded-lg p-4 flex flex-col items-center">
+                        <Timer className="h-6 w-6 mb-2 text-fitness-primary" />
+                        <p className="text-muted-foreground text-sm">Durée estimée</p>
+                        <p className="font-semibold">30-45 min</p>
+                      </div>
+                      <div className="bg-muted rounded-lg p-4 flex flex-col items-center">
+                        <Calendar className="h-6 w-6 mb-2 text-fitness-primary" />
+                        <p className="text-muted-foreground text-sm">Fréquence</p>
+                        <p className="font-semibold">1x / semaine</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Exercices</h2>
+                
+                {workout.exercises.map((exercise, index) => (
+                  <Card key={exercise.id} className="overflow-hidden">
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="aspect-video md:aspect-square overflow-hidden">
+                        <img 
+                          src={exercise.video} 
+                          alt={exercise.name} 
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="md:col-span-2 p-6">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-xl font-bold">{exercise.name}</h3>
+                            <p className="text-muted-foreground">Exercice {index + 1}/{workout.exercises.length}</p>
+                          </div>
+                          <Button size="sm" className="flex gap-1">
+                            <Play className="h-4 w-4" />
+                            Vidéo
+                          </Button>
+                        </div>
+                        
+                        <p className="mb-4">{exercise.description}</p>
+                        
+                        <div className="grid grid-cols-3 gap-2 mb-4">
+                          <div className="bg-muted rounded p-2 text-center">
+                            <p className="text-xs text-muted-foreground">Séries</p>
+                            <p className="font-medium">{exercise.sets}</p>
+                          </div>
+                          <div className="bg-muted rounded p-2 text-center">
+                            <p className="text-xs text-muted-foreground">Répétitions</p>
+                            <p className="font-medium">{exercise.reps}</p>
+                          </div>
+                          <div className="bg-muted rounded p-2 text-center">
+                            <p className="text-xs text-muted-foreground">Repos</p>
+                            <p className="font-medium">{exercise.rest}</p>
+                          </div>
+                        </div>
+                        
+                        <Progress value={0} className="h-1.5 mb-2" />
+                        <div className="flex justify-between text-xs">
+                          <span>Progression</span>
+                          <span>0%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <Card className="sticky top-4">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Commencer l'entraînement</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Suivez votre séance en temps réel et enregistrez votre progression.
+                    </p>
+                    
+                    <Button className="w-full" onClick={startWorkout}>
+                      <Play className="mr-2 h-4 w-4" />
+                      Démarrer la séance
+                    </Button>
+                    
+                    <div className="rounded-lg bg-muted p-4">
+                      <h3 className="mb-2 font-medium">Conseils</h3>
+                      <ul className="space-y-2 text-sm">
+                        <li className="flex gap-2">
+                          <Check className="h-4 w-4 text-fitness-primary shrink-0" />
+                          <span>Hydratez-vous régulièrement</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <Check className="h-4 w-4 text-fitness-primary shrink-0" />
+                          <span>Échauffez-vous pendant 5-10 minutes</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <Check className="h-4 w-4 text-fitness-primary shrink-0" />
+                          <span>Respectez les temps de repos</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </Layout>
   );
