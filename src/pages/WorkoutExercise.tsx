@@ -15,6 +15,32 @@ const WorkoutExercise = () => {
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [exerciseProgress, setExerciseProgress] = useState<Record<string, number>>({});
 
+  // Function to get the appropriate icon based on workout type
+  const getWorkoutIcon = () => {
+    if (!workout) return <Dumbbell className="h-6 w-6 mb-2 text-fitness-primary" />;
+    
+    if (id) {
+      // Quick workouts
+      switch (id) {
+        case 'hiit-express':
+          return <Timer className="h-6 w-6 mb-2 text-fitness-primary" />;
+        case 'stretching-complet':
+          return <Flower className="h-6 w-6 mb-2 text-fitness-primary" />;
+        default:
+          return <Dumbbell className="h-6 w-6 mb-2 text-fitness-primary" />;
+      }
+    }
+    
+    // Regular workout plans
+    if (workout.name.toLowerCase().includes('cardio')) {
+      return <Timer className="h-6 w-6 mb-2 text-fitness-primary" />;
+    } else if (workout.name.toLowerCase().includes('yoga') || workout.name.toLowerCase().includes('stretching')) {
+      return <Flower className="h-6 w-6 mb-2 text-fitness-primary" />;
+    } else {
+      return <Dumbbell className="h-6 w-6 mb-2 text-fitness-primary" />;
+    }
+  };
+
   // Dans une application réelle, récupérer les données depuis une API
   const findWorkout = () => {
     // Collection d'exercices organisés par type d'entraînement
