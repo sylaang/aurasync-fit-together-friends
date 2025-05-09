@@ -25,6 +25,7 @@ const StartWorkout = () => {
   // Sample quick workout options
   const quickWorkouts = [
     {
+      id: "hiit-express",
       title: "HIIT Express",
       duration: "15 min",
       intensity: "Intense",
@@ -32,6 +33,7 @@ const StartWorkout = () => {
       image: "https://images.unsplash.com/photo-1599058917765-a780eda07a3e",
     },
     {
+      id: "stretching-complet",
       title: "Stretching Complet",
       duration: "20 min",
       intensity: "Facile",
@@ -39,6 +41,7 @@ const StartWorkout = () => {
       image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b",
     },
     {
+      id: "circuit-training",
       title: "Circuit Training",
       duration: "30 min",
       intensity: "Modéré",
@@ -73,6 +76,13 @@ const StartWorkout = () => {
     },
   ];
 
+  // Handle starting a quick workout by navigating to the workout exercise page
+  const handleStartQuickWorkout = (workoutId) => {
+    // Use the correct route format that matches the App.tsx routes
+    // We're using the workout ID as both the plan ID and workout ID for quick workouts
+    navigate(`/workout-plans/${workoutId}/workout/${workoutId}`);
+  };
+
   return (
     <Layout>
       <div className="container px-4 py-8">
@@ -91,8 +101,8 @@ const StartWorkout = () => {
           
           <TabsContent value="quick">
             <div className="grid gap-6 md:grid-cols-3">
-              {quickWorkouts.map((workout, index) => (
-                <Card key={index} className="overflow-hidden hover:shadow-md transition-all duration-200">
+              {quickWorkouts.map((workout) => (
+                <Card key={workout.id} className="overflow-hidden hover:shadow-md transition-all duration-200">
                   <div className="aspect-video w-full overflow-hidden">
                     <img
                       src={workout.image}
@@ -118,7 +128,10 @@ const StartWorkout = () => {
                         <span className="text-sm">{workout.calories} cal</span>
                       </div>
                     </div>
-                    <Button className="w-full" onClick={() => navigate(`/workout-exercise/${index}`)}>
+                    <Button 
+                      className="w-full" 
+                      onClick={() => handleStartQuickWorkout(workout.id)}
+                    >
                       Démarrer
                     </Button>
                   </CardContent>
