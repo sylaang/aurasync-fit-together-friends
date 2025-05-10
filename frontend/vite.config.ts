@@ -19,4 +19,7 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: 'frontend/dist', // Spécifiez ici le dossier de sortie
+  },
 }));
