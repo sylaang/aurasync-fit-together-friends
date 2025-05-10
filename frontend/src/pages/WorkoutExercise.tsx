@@ -93,7 +93,7 @@ const WorkoutExercise = () => {
         { id: "ex1", name: "Squats", sets: 3, reps: "15", rest: "30s", video: "https://images.unsplash.com/photo-1574680096145-d05b474e2155", description: "Pieds écartés à la largeur des épaules, descendez comme pour s'asseoir puis remontez" },
         { id: "ex2", name: "Pompes", sets: 3, reps: "10-12", rest: "30s", video: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b", description: "Position de planche, fléchissez les coudes pour descendre puis remontez" },
         { id: "ex3", name: "Jumping lunges", sets: 3, reps: "12 par jambe", rest: "30s", video: "https://images.unsplash.com/photo-1434608519344-49d77a124f9a", description: "Alternez les fentes en sautant pour changer de jambe" }
-      ]
+      ],
     };
 
     const workoutPlans = {
@@ -202,6 +202,10 @@ const WorkoutExercise = () => {
       },
       
       // Programme par défaut et autres programmes
+    
+    };
+
+    const program = {
       "default": {
         weeks: [
           {
@@ -212,25 +216,25 @@ const WorkoutExercise = () => {
                 id: "w1d1", 
                 name: "Jour 1: Haut du corps", 
                 completed: false,
-                exercises: exerciseLibrary["upper-body"]
+                exercises: exerciseLibrary["upper-body"] || [] // Si "upper-body" n'est pas défini, on utilise un tableau vide
               },
               { 
                 id: "w1d2", 
                 name: "Jour 2: Bas du corps", 
                 completed: false,
-                exercises: exerciseLibrary["lower-body"]
+                exercises: exerciseLibrary["lower-body"] || []
               },
               { 
                 id: "w1d3", 
                 name: "Jour 3: Cardio", 
                 completed: false,
-                exercises: exerciseLibrary["cardio"]
+                exercises: exerciseLibrary["cardio"] || []
               },
               { 
                 id: "w1d4", 
                 name: "Jour 4: Récupération active", 
                 completed: false,
-                exercises: exerciseLibrary["recovery"]
+                exercises: exerciseLibrary["recovery"] || []
               },
             ]
           },
@@ -238,19 +242,16 @@ const WorkoutExercise = () => {
             id: "week2",
             name: "Semaine 2: Progression",
             workouts: [
-              { id: "w2d1", name: "Jour 1: Haut du corps intensif", completed: false,
-                exercises: exerciseLibrary["upper-body"] },
-              { id: "w2d2", name: "Jour 2: Bas du corps intensif", completed: false,
-                exercises: exerciseLibrary["lower-body"] },
-              { id: "w2d3", name: "Jour 3: HIIT", completed: false,
-                exercises: exerciseLibrary["hiit"] },
-              { id: "w2d4", name: "Jour 4: Récupération", completed: false,
-                exercises: exerciseLibrary["recovery"] },
+              { id: "w2d1", name: "Jour 1: Haut du corps intensif", completed: false, exercises: exerciseLibrary["upper-body"] || [] },
+              { id: "w2d2", name: "Jour 2: Bas du corps intensif", completed: false, exercises: exerciseLibrary["lower-body"] || [] },
+              { id: "w2d3", name: "Jour 3: HIIT", completed: false, exercises: exerciseLibrary["hiit"] || [] },
+              { id: "w2d4", name: "Jour 4: Récupération", completed: false, exercises: exerciseLibrary["recovery"] || [] },
             ]
           }
         ]
       }
     };
+    
 
     // First, check if this is a quick workout ID
     if (id && exerciseLibrary[id]) {
@@ -403,6 +404,8 @@ const WorkoutExercise = () => {
     const totalProgress = Object.values(exerciseProgress).reduce((sum, value) => sum + value, 0);
     return Math.round(totalProgress / workout.exercises.length);
   };
+
+  
 
   return (
     <Layout>
