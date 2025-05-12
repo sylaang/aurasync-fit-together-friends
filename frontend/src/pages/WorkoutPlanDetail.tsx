@@ -13,7 +13,12 @@ const WorkoutPlanDetail = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-     console.log(import.meta.env.VITE_API_URL);  // <-- Ici, tu vérifies la valeur
+    console.log("ID récupéré:", id);  // <-- Vérifie l'ID ici
+      if (!id) {
+    setError("L'ID du programme est introuvable.");
+    setLoading(false);
+    return;
+  }
     fetch(`${import.meta.env.VITE_API_URL}/workout-plans/${id}/`)
       .then((response) => {
         if (!response.ok) {
