@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const WorkoutPlanDetail = () => {
   const { id } = useParams();
+  console.log("ID récupéré depuis l'URL :", id);
   const navigate = useNavigate();
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [loading, setLoading] = useState(true);
