@@ -13,6 +13,7 @@ const WorkoutPlanDetail = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+     console.log(import.meta.env.VITE_API_URL);  // <-- Ici, tu vérifies la valeur
     fetch(`${import.meta.env.VITE_API_URL}/workout-plans/${id}/`)
       .then((response) => {
         if (!response.ok) {
