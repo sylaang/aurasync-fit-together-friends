@@ -1,6 +1,6 @@
 // api.ts
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 if (!apiUrl) {
   throw new Error("L'URL de l'API n'est pas définie dans les variables d'environnement.");
