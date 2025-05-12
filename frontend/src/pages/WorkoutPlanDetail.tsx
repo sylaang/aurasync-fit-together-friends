@@ -14,6 +14,7 @@ const WorkoutPlanDetail = () => {
 
   useEffect(() => {
     console.log("ID récupéré:", id);  // <-- Vérifie l'ID ici
+    console.log("API URL utilisée :", import.meta.env.VITE_API_URL);
       if (!id) {
     setError("L'ID du programme est introuvable.");
     setLoading(false);
