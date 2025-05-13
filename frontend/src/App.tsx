@@ -26,8 +26,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/workout-plans" element={<WorkoutPlans />} />
-            <Route path="/workout-plans/:id" element={<WorkoutPlanDetail />} />
-            <Route path="/workout-plans/:id/workout/:workoutId" element={<WorkoutExercise />} />
+            <Route path="/workout-plans/:slug" element={<WorkoutPlanDetail />} />
+            <Route path="/workout-plans/:slug/workout/:workoutId" element={<WorkoutExercise />} />
             <Route path="/start-workout" element={<StartWorkout />} />
             <Route path="/progress" element={<Progress />} />
             <Route path="/social" element={<Social />} />
