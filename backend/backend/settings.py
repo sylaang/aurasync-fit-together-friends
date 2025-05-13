@@ -49,7 +49,7 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8080',
-    'aurasync-fit-together-friends.vercel.app',
+    'https://fit-together-friends.vercel.app',
 ]
 
 ROOT_URLCONF = 'backend.urls'
