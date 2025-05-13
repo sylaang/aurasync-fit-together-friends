@@ -9,21 +9,21 @@ def get_all_plans(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
-def get_plan_by_slug(request, slug):
+def get_plan_by_id(request, id):
     try:
         supabase_client = get_supabase_client()
-        response = supabase_client.table('workout_plans').select('*').eq('slug', slug).execute()
+        response = supabase_client.table('workout_plans').select('*').eq('id', id).execute()
         if response.data:
             return JsonResponse(response.data[0], safe=False)
         return JsonResponse({'error': 'Plan not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
     
-def get_workout_by_id(request, slug, workout_id):
+def get_workout_by_id(request, id, workout_id):
     try:
         supabase_client = get_supabase_client()
 
-        response = supabase_client.table('workout_plans').select('*').eq('slug', slug).execute()
+        response = supabase_client.table('workout_plans').select('*').eq('id', id).execute()
 
         if response.data:
             plan_data = response.data[0]

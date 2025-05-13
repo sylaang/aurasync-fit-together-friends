@@ -6,22 +6,22 @@ import { ArrowLeft, ChevronRight, Dumbbell, List } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const WorkoutPlanDetail = () => {
-  const { slug } = useParams();
-  console.log("ID récupéré depuis l'URL :", slug);
+  const { id } = useParams();
+  console.log("ID récupéré depuis l'URL :", id);
   const navigate = useNavigate();
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("ID récupéré:", slug);  // <-- Vérifie l'ID ici
+    console.log("ID récupéré:", id);  // <-- Vérifie l'ID ici
     console.log("API URL utilisée :", import.meta.env.VITE_API_URL);
-      if (!slug) {
+      if (!id) {
     setError("L'ID du programme est introuvable.");
     setLoading(false);
     return;
   }
-    fetch(`${import.meta.env.VITE_API_URL}/workout-plans/${slug}/`)
+    fetch(`${import.meta.env.VITE_API_URL}/workout-plans/${id}/`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Problème avec la récupération des données de l\'API');
@@ -37,7 +37,7 @@ const WorkoutPlanDetail = () => {
         setError('Une erreur est survenue lors de la récupération du plan.');
         setLoading(false);
       });
-  }, [slug]);
+  }, [id]);
 
     // Ici, on ajoute la vérification de l'état de chargement, de l'erreur et des données manquantes
     if (loading) return <div>Chargement...</div>;
@@ -49,7 +49,7 @@ const WorkoutPlanDetail = () => {
   const startFirstWorkout = () => {
     if (workoutPlan && workoutPlan.weeks.length > 0 && workoutPlan.weeks[0].workouts.length > 0) {
       const firstWorkout = workoutPlan.weeks[0].workouts[0];
-      navigate(`/workout-plans/${slug}/workout/${firstWorkout.id}`);
+      navigate(`/workout-plans/${id}/workout/${firstWorkout.id}`);
     }
   };
 
@@ -92,7 +92,7 @@ const WorkoutPlanDetail = () => {
                             <Button 
                               variant="outline" 
                               className="w-full justify-between"
-                              onClick={() => navigate(`/workout-plans/${slug}/workout/${workout.id}`)}
+                              onClick={() => navigate(`/workout-plans/${id}/workout/${workout.id}`)}
                             >
                               <div className="flex items-center">
                                 <List className="mr-2 h-4 w-4" />
