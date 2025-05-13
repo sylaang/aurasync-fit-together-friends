@@ -50,6 +50,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:8080',
     'https://fit-together-friends.vercel.app',
+    'https://aurasync-fit-together-friends-git-master-sylaangs-projects.vercel.app',  # Autre URL de pré-production
+    'https://aurasync-fit-together-friends-4v8r6rklg-sylaangs-projects.vercel.app',
 ]
 
 ROOT_URLCONF = 'backend.urls'
